@@ -18,10 +18,8 @@ export default {
     Navbar,
     Footer,
   },
-  data() {
-    return {
-      title: "Fellowship",
-    };
-  },
+  data: () => ({
+    title: "Fellowship",
+  }),
 };
 </script>
