@@ -1,54 +1,42 @@
 import colors from 'vuetify/es5/util/colors'
 
 export default {
-  // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    titleTemplate: '%s - fellowship-frontend',
-    title: 'fellowship-frontend',
+    title: 'Fellowship',
     htmlAttrs: {
       lang: 'en'
     },
     meta: [
-      { charset: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: '' },
-      { name: 'format-detection', content: 'telephone=no' }
+      {charset: "utf-8"},
+      {name: "viewport", content: "width=device-width, initial-scale=1"},
+      {property: "og:title", name: "og:title", content: "Fellowship"},
+      {property: "og:url", name: "og:url", content: "https://fellowship-frontend-six.vercel.app/"},
+      {property: "og:image", name: "og:image", content: "/v.png"},
+      {property: "og:type", name: "og:type", content: "web application"},
+      {property: "og:description", name: "og:description", content: "Fellowship - A scholarship aggregator"},
+      {property: "description", name: "description", content: "Fellowship - A scholarship aggregator"}
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+      {rel: 'icon', type: 'image/x-icon', href: '/logo.svg'}
     ]
   },
-
-  // Global CSS: https://go.nuxtjs.dev/config-css
-  css: [
-  ],
-
-  // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [
-  ],
-
-  // Auto import components: https://go.nuxtjs.dev/config-components
-  components: false,
-
-  // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
-  buildModules: [
-    // https://go.nuxtjs.dev/vuetify
-    '@nuxtjs/vuetify',
-  ],
-
-  // Modules: https://go.nuxtjs.dev/config-modules
-  modules: [
-    // https://go.nuxtjs.dev/axios
-    '@nuxtjs/axios',
-  ],
-
-  // Axios module configuration: https://go.nuxtjs.dev/config-axios
-  axios: {
-    // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
-    baseURL: '/',
+  loading: {
+    color: "#2096f3",
+    height: "3px"
   },
-
-  // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
+  css: [],
+  plugins: [],
+  components: false,
+  buildModules: [
+    '@nuxtjs/vuetify'
+  ],
+  modules: [
+    '@nuxtjs/axios',
+    "@nuxtjs/auth-next"
+  ],
+  axios: {
+    baseURL: process.env.BACKEND_BASE_URL || "http://localhost:8080/api/v1"
+  },
   vuetify: {
     customVariables: ['~/assets/variables.scss'],
     theme: {
@@ -66,8 +54,47 @@ export default {
       }
     }
   },
-
-  // Build Configuration: https://go.nuxtjs.dev/config-build
-  build: {
-  }
+  auth: {
+    strategies: {
+      local: {
+        scheme: "refresh",
+        cookie: {
+          prefix: "auth.",
+          maxAge: 86400,
+          secure: true
+        },
+        token: {
+          prefix: "access_token.",
+          property: "data.access_token",
+          maxAge: 86400,
+          type: "Bearer"
+        },
+        refresh_token: {
+          prefix: "refresh_token.",
+          property: "data.refresh_token",
+          data: "refresh_token",
+          maxAge: 129600
+        },
+        user: {
+          property: "user",
+          autoFetch: true
+        },
+        endpoints: {
+          login: {url: "/login", method: "post"},
+          refresh: {url: "/user/token/refresh", method: "post"},
+          user: {url: "/user", method: "get"},
+          logout: false
+        },
+        autoLogout: false
+      }
+    },
+    redirect: {
+      login: "/login",
+      logout: "/",
+      callback: "/login",
+      home: "/"
+    },
+    localStorage: false
+  },
+  build: {}
 }

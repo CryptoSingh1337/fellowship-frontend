@@ -20,6 +20,9 @@
 import ScholarshipCard from "@/components/card/Scholarship.vue";
 
 export default {
+  head: () => ({
+    title: "Home - Fellowship"
+  }),
   components: {
     ScholarshipCard,
   },

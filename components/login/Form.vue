@@ -3,6 +3,7 @@
     <v-col cols="12" md="7">
       <v-card-text>
         <h3 class="headline font-weight-bold text-center mb-4">Login in to your Account</h3>
+        <v-alert :value="alert" class="mx-auto" dense outlined type="error" width="70%">{{ alertText }}</v-alert>
         <v-form v-model="valid">
           <v-row align="center" justify="center" no-gutters>
             <v-col cols="12" sm="8">
@@ -26,7 +27,9 @@
               <NuxtLink class="text-decoration-none" to="/forgot">
                 <div class="caption blue--text my-3">Forgot password</div>
               </NuxtLink>
-              <v-btn :disabled="!valid" block class="white--text" color="blue" tile>Log in</v-btn>
+              <v-btn :disabled="!valid" :loading="loading" block class="white--text" color="blue"
+                     tile @click.prevent="handleLogin">Log in
+              </v-btn>
               <h5 class="text-center grey--text mt-4 mb-3">Or Log in using</h5>
               <div class="d-flex align-center justify-space-around">
                 <v-btn color="red" outlined>
@@ -53,9 +56,13 @@
 </template>
 
 <script>
+
 export default {
   data: () => ({
     valid: true,
+    loading: false,
+    alert: false,
+    alertText: "",
     username: "",
     password: "",
     rules: {
@@ -65,6 +72,27 @@ export default {
   methods: {
     switchForm() {
       this.$nuxt.$emit("switchToRegister")
+    },
+    handleLogin() {
+      const data = {
+        username: this.username,
+        password: this.password,
+      };
+      this.loading = true;
+      this.$auth
+        .loginWith("local", {data: data})
+        .then((res) => res.data.data)
+        .then((data) => {
+          this.$auth.setUserToken(data.accessToken, data.refreshToken);
+        })
+        .then(() => (this.loading = false))
+        .catch((err) => {
+          if (err.response.data.status === 401) {
+            this.alertText = "Invalid username/password";
+            this.alert = true;
+          }
+          this.loading = false;
+        });
     }
   }
 }
