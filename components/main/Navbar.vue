@@ -8,7 +8,7 @@
     ></v-img>
     <v-toolbar-title class="ml-3 headline" v-text="title" />
     <v-spacer />
-    <v-btn color="primary">LogIn/SignIn</v-btn>
+    <v-btn color="primary" to = "/login">LogIn/SignIn</v-btn>
   </v-app-bar>
 </template>
 
