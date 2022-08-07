@@ -41,7 +41,7 @@
               </v-row>
               <v-text-field
                 v-model="email"
-                :rules="[rules.required]"
+                :rules="[rules.required, rules.email]"
                 autocomplete="false"
                 color="blue"
                 dense
@@ -64,7 +64,9 @@
                 label="Password"
                 outlined
                 type="password"/>
-              <v-btn :disabled="!valid" block class="white--text" color="blue" tile>Sign up</v-btn>
+              <v-btn :disabled="!valid" :loading="loading" block class="white--text" color="blue"
+                     tile @click.prevent="handleSignUp">Sign up
+              </v-btn>
               <h5 class="text-center grey--text mt-4 mb-3">Or Sign up using</h5>
               <div class="d-flex align-center justify-space-around">
                 <v-btn color="red" outlined>
@@ -86,6 +88,7 @@
 export default {
   data: () => ({
     valid: true,
+    loading: false,
     firstName: "",
     lastName: "",
     email: "",
@@ -93,11 +96,57 @@ export default {
     password: "",
     rules: {
       required: (value) => !!value || "Required.",
-    }
+      email: (value) =>
+        !value ||
+        /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(value) ||
+        "Invalid email."
+    },
+    alert: false,
+    alertText: ""
   }),
   methods: {
+    setAlert(type, icon, text) {
+      this.$store.commit("showAlert", {
+        alertType: type,
+        alertIcon: icon,
+        alertText: text,
+      });
+    },
     switchForm() {
       this.$nuxt.$emit("switchToLogin")
+    },
+    handleSignUp() {
+      const data = {
+        username: this.username,
+        firstName: this.firstName,
+        lastName: this.lastName,
+        email: this.email,
+        channelName: this.channelName,
+        password: this.password,
+      };
+      this.loading = true;
+      this.$axios
+        .post("/user/create", data)
+        .then(() =>
+          this.setAlert(
+            "success",
+            "mdi-rocket-launch-outline",
+            "Your account has been created."
+          ))
+        .then(() => {
+          this.loading = false;
+          this.switchForm();
+          setTimeout(() => this.$store.commit("toggleAlert"), 2000)
+        })
+        .catch((err) => {
+          this.setAlert(
+            "error",
+            "mdi-alert-octagon-outline",
+            err.response.data.error.message[0]
+          );
+          this.loading = false;
+          setTimeout(() => this.$store.commit("toggleAlert"), 4000)
+        });
     }
   }
 }

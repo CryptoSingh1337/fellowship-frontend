@@ -23,6 +23,9 @@ import RegisterForm from "@/components/register/Form.vue";
 
 export default {
   layout: "basic",
+  head: () => ({
+    title: "Login - Fellowship"
+  }),
   components: {
     LoginForm,
     RegisterForm
@@ -31,9 +34,15 @@ export default {
     step: 1
   }),
   created() {
-    this.$nuxt.$on("switchToRegister", () => this.step++);
+    this.$nuxt.$on("switchToRegister", () => {
+      this.step++;
+      document.title = "Register - Fellowship";
+    });
 
-    this.$nuxt.$on("switchToLogin", () => this.step--);
+    this.$nuxt.$on("switchToLogin", () => {
+      this.step--;
+      document.title = "Login - Fellowship";
+    });
   }
 }
 </script>
