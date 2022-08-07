@@ -2,15 +2,14 @@
   <v-container fluid>
     <v-row class="ma-3" no-gutters>
       <v-col
-        :key="i"
         v-for="i in new Array(15)"
-        cols="12"
-        sm="4"
-        md="4"
-        lg="3"
+        :key="i"
         class="mx-xs-auto my-3"
-      >
-        <ScholarshipCard />
+        cols="12"
+        lg="3"
+        md="4"
+        sm="4">
+        <ScholarshipCard/>
       </v-col>
     </v-row>
   </v-container>
@@ -25,6 +24,12 @@ export default {
   }),
   components: {
     ScholarshipCard,
-  },
+  }
 };
 </script>
+
+<style scoped>
+.border {
+  border: 1px grey solid;
+}
+</style>
