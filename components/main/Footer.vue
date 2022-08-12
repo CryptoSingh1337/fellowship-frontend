@@ -1,5 +1,5 @@
 <template>
-  <v-footer :app="$vuetify.breakpoint.mdAndUp" padless>
+  <v-footer class="grey lighten-2" padless>
     <v-col class="text-center" cols="12">
       Created by Team Cyborg
       {{ new Date().getFullYear() }} —
