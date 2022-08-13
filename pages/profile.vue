@@ -13,7 +13,7 @@
       <v-divider v-if="$vuetify.breakpoint.mdAndUp" vertical></v-divider>
       <v-col :class="$vuetify.breakpoint.mdAndUp ? 'ml-8' : 'mt-10'" cols="12" md="4">
         <v-container>
-          <v-form ref="form" v-model="valid_1">
+          <v-form v-model="valid_1">
             <v-row>
               <v-col cols="6">
                 <v-text-field v-model="firstName" :rules="[rules.required]" dense label="First name" outlined/>
@@ -25,7 +25,7 @@
             <v-text-field v-model="username" dense disabled label="Username" outlined readonly/>
             <v-text-field v-model="email" :rules="[rules.required, rules.email]" dense label="Email" outlined/>
             <v-select v-model="country" :items="countries" :rules="[rules.required]" dense label="Country" outlined/>
-            <v-text-field v-model="program" :rules="[rules.required]" dense label="Program" outlined/>
+            <v-select v-model="program" :items="programs" :rules="[rules.required]" dense label="Program" outlined/>
             <v-btn :disabled="!valid_1" :loading="loading_1" color="primary" tile @click.prevent="handleSave">Save
             </v-btn>
           </v-form>
@@ -92,7 +92,8 @@ export default {
         /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(value) ||
         "Invalid email."
     },
-    countries: Object.keys(countries.countries).map(code => countries.countries[code].name).sort()
+    countries: Object.keys(countries.countries).map(code => countries.countries[code].name).sort(),
+    programs: ["Bachelor", "Master", "Phd"]
   }),
   async fetch() {
     if (this.$auth.loggedIn) {

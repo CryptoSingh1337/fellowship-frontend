@@ -1,22 +1,27 @@
 <template>
-  <v-container fluid>
-    <v-row class="ma-3" no-gutters>
-      <v-col
-        :key="i"
-        v-for="i in new Array(15)"
-        cols="12"
-        sm="4"
-        md="4"
-        lg="3"
-        class="mx-xs-auto my-3"
-      >
-        <ScholarshipCard />
+  <v-container class="fill-height" fluid>
+    <v-row align="center" class="pt-10" justify="center">
+      <v-col cols="12" md="8">
+        <v-text-field v-model="searchQuery" append-icon="mdi-magnify" class="mb-10" hide-details label="Search"
+                      outlined/>
+        <v-row class="ma-3" no-gutters>
+          <v-col cols="3">
+            <SideMenu/>
+          </v-col>
+          <v-col :class="$vuetify.breakpoint.mdAndUp ? 'ml-5' : ''">
+            <ScholarshipCard v-for="i in new Array(10)" :key="i" :idx="i"/>
+            <div class="d-flex justify-center">
+              <v-btn v-model="page" color="primary" large tile @click.prevent="page++">Load more</v-btn>
+            </div>
+          </v-col>
+        </v-row>
       </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script>
+import SideMenu from "@/components/index/SideMenu.vue";
 import ScholarshipCard from "@/components/card/Scholarship.vue";
 
 export default {
@@ -24,7 +29,12 @@ export default {
     title: "Home - Fellowship"
   }),
   components: {
-    ScholarshipCard,
+    SideMenu,
+    ScholarshipCard
   },
+  data: () => ({
+    searchQuery: "",
+    page: 0,
+  })
 };
 </script>
