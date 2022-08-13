@@ -1,25 +1,40 @@
 <template>
-  <v-list class="border rounded-lg">
-    <v-subheader>Filter by</v-subheader>
-    <v-list-item>
-      <Countries @selectedCountry="updateCountry"/>
-    </v-list-item>
-  </v-list>
+  <v-container>
+    <h3 class="mb-4">Filter by -</h3>
+    <v-row class="mt-2" no-gutters>
+      <h4 class="my-3">Countries:</h4>
+      <v-select v-model="country" :items="countries" dense hide-details label="Country" multiple solo/>
+    </v-row>
+    <v-divider class="my-6"/>
+    <v-row class="flex-column" no-gutters>
+      <h4 class="">Degrees:</h4>
+      <v-row justify="center" no-gutters>
+        <v-col cols="10">
+          <v-checkbox v-for="(d, idx) in degrees" :key="idx" v-model="degree" :label="d" :value="d" hide-details/>
+        </v-col>
+      </v-row>
+    </v-row>
+    <v-divider class="my-6"/>
+    <v-row justify="center" no-gutters>
+      <v-col class="d-flex justify-space-between" cols="10">
+        <v-btn class="elevation-0" color="gray" outlined tile @click.prevent="country = []; degree = [];">Reset</v-btn>
+        <v-btn class="elevation-0" color="primary" tile>Apply</v-btn>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
-import Countries from "~/components/drop-down/Countries.vue";
+import countries from "countries-list";
 
 export default {
   name: "SideMenu",
-  components: {
-    Countries
-  },
-  methods: {
-    updateCountry(country) {
-      console.log(country);
-    }
-  }
+  data: () => ({
+    country: "",
+    degree: [],
+    degrees: ["Bachelor", "Master", "Phd"],
+    countries: Object.keys(countries.countries).map(code => countries.countries[code].name).sort()
+  })
 }
 </script>
 

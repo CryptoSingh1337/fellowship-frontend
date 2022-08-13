@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app class="background">
     <Navbar :title="title"/>
     <Alert
       :icon="alertIcon"
@@ -35,3 +35,8 @@ export default {
   }),
 };
 </script>
+<style>
+.background {
+  background-image: repeating-linear-gradient(90deg, transparent 0%, #fff 30%, #fff 75%, transparent 100%), url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAIklEQVQoU2N89+7dfwYsQEhIiBEkzDgkFGDzAbIY2Cv4AACvrBgJjYNGfwAAAABJRU5ErkJggg==) !important;
+}
+</style>
