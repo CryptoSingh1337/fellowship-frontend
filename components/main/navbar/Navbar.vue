@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar app fixed>
+  <v-app-bar app class="v-app-bar--underline" fixed flat tile>
     <NuxtLink class="text-decoration-none" to="/">
       <v-img
         class="ml-1 hidden-xs-only"
@@ -33,3 +33,11 @@ export default {
   },
 };
 </script>
+<style>
+.v-app-bar--underline {
+  background: white !important;
+  border-width: 0 0 thin;
+  border-style: solid;
+  border-bottom-color: rgba(0, 0, 0, .12) !important;
+}
+</style>
