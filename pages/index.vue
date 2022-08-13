@@ -5,14 +5,16 @@
         <v-text-field v-model="searchQuery" append-icon="mdi-magnify" class="mb-10" hide-details label="Search"
                       outlined/>
         <v-row class="ma-3" no-gutters>
-          <v-col cols="3">
+          <v-col cols="12" md="3">
             <div class="d-flex">
               <SideMenu/>
-              <v-divider vertical/>
+              <v-divider v-if="$vuetify.breakpoint.mdAndUp" vertical/>
             </div>
+            <v-divider v-if="$vuetify.breakpoint.smAndDown" class="my-6"/>
           </v-col>
           <v-col :class="$vuetify.breakpoint.mdAndUp ? 'ml-5' : ''">
-            <h2>{{ $auth ? ($auth.loggedIn ? 'Recommended' : 'Latest') : 'Latest' }} Scholarships</h2>
+            <h2 :class="$vuetify.breakpoint.smAndDown ? 'text-center' : ''">
+              {{ $auth ? ($auth.loggedIn ? 'Recommended' : 'Latest') : 'Latest' }} Scholarships</h2>
             <ScholarshipCard v-for="i in new Array(10)" :key="i" :idx="i"/>
             <div class="d-flex justify-center">
               <v-btn v-model="page" class="elevation-0" color="primary" large tile @click.prevent="page++">Load more

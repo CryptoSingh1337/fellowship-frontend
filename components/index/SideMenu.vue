@@ -1,9 +1,11 @@
 <template>
   <v-container>
     <h3 class="mb-4">Filter by -</h3>
-    <v-row class="mt-2" no-gutters>
+    <v-row class="mt-2 flex-column" no-gutters>
       <h4 class="my-3">Countries:</h4>
-      <v-select v-model="country" :items="countries" dense hide-details label="Country" multiple solo/>
+      <v-row justify="center" no-gutters>
+        <v-select v-model="country" :items="countries" dense hide-details label="Country" multiple solo/>
+      </v-row>
     </v-row>
     <v-divider class="my-6"/>
     <v-row class="flex-column" no-gutters>
