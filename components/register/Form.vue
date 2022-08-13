@@ -63,7 +63,8 @@
                 dense
                 label="Password"
                 outlined
-                type="password"/>
+                :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
+                :type="show ? 'text' : 'password'" @click:append="show = !show"/>
               <v-btn :disabled="!valid" :loading="loading" block class="white--text" color="blue"
                      tile @click.prevent="handleSignUp">Sign up
               </v-btn>
@@ -94,6 +95,7 @@ export default {
     email: "",
     username: "",
     password: "",
+    show: false,
     rules: {
       required: (value) => !!value || "Required.",
       email: (value) =>

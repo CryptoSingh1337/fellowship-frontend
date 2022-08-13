@@ -1,10 +1,10 @@
-import colors from 'vuetify/es5/util/colors'
+import colors from "vuetify/es5/util/colors"
 
 export default {
   head: {
-    title: 'Fellowship',
+    title: "Fellowship",
     htmlAttrs: {
-      lang: 'en'
+      lang: "en"
     },
     meta: [
       {charset: "utf-8"},
@@ -17,7 +17,7 @@ export default {
       {property: "description", name: "description", content: "Fellowship - A scholarship aggregator"}
     ],
     link: [
-      {rel: 'icon', type: 'image/x-icon', href: '/logo.svg'}
+      {rel: "icon", type: "image/x-icon", href: "/logo.svg"}
     ]
   },
   loading: {
@@ -28,17 +28,17 @@ export default {
   plugins: [],
   components: false,
   buildModules: [
-    '@nuxtjs/vuetify'
+    "@nuxtjs/vuetify"
   ],
   modules: [
-    '@nuxtjs/axios',
+    "@nuxtjs/axios",
     "@nuxtjs/auth-next"
   ],
   axios: {
     baseURL: process.env.BACKEND_BASE_URL || "http://localhost:8080/api/v1"
   },
   vuetify: {
-    customVariables: ['~/assets/variables.scss'],
+    customVariables: ["~/assets/variables.scss"],
     theme: {
       dark: false,
       themes: {
@@ -96,5 +96,7 @@ export default {
     },
     localStorage: false
   },
-  build: {}
+  build: {
+    transpile: ["countries-list"]
+  }
 }

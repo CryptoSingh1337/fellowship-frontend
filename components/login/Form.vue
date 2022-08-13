@@ -23,7 +23,8 @@
                 dense
                 label="Password"
                 outlined
-                type="password"/>
+                :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
+                :type="show ? 'text' : 'password'" @click:append="show = !show"/>
               <NuxtLink class="text-decoration-none" to="/forgot">
                 <div class="caption blue--text my-3">Forgot password</div>
               </NuxtLink>
@@ -60,6 +61,7 @@
 export default {
   data: () => ({
     valid: true,
+    show: false,
     loading: false,
     alert: false,
     alertText: "",
