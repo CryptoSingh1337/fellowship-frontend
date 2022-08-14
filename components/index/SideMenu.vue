@@ -67,3 +67,8 @@ export default {
   }
 }
 </script>
+<style>
+.v-list-item__title {
+  text-transform: capitalize;
+}
+</style>
