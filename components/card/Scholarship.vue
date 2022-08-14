@@ -1,5 +1,5 @@
 <template>
-  <v-card :class="idx === 0 ? 'mb-4' : 'my-4'">
+  <v-card :class="idx === 0 ? 'mb-4' : 'my-4'" outlined>
     <v-card-text class="pb-0">
       <div class="text-capitalize">{{ scholarship.country }}</div>
       <h3 class="headline text--primary">{{ scholarship.title }}</h3>
@@ -18,7 +18,7 @@
       </div>
     </v-card-text>
     <v-card-actions>
-      <v-btn :href="scholarship.url" color="primary accent-4" target="_blank" text>
+      <v-btn :href="scholarship.url" color="primary accent-4" target="_blank" text tile>
         Read More
       </v-btn>
     </v-card-actions>

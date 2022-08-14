@@ -65,15 +65,15 @@
                 outlined
                 :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
                 :type="show ? 'text' : 'password'" @click:append="show = !show"/>
-              <v-btn :disabled="!valid" :loading="loading" block class="white--text" color="blue"
+              <v-btn :disabled="!valid" :loading="loading" block class="elevation-0 white--text" color="blue"
                      tile @click.prevent="handleSignUp">Sign up
               </v-btn>
               <h5 class="text-center grey--text mt-4 mb-3">Or Sign up using</h5>
               <div class="d-flex align-center justify-space-around">
-                <v-btn color="red" outlined>
+                <v-btn color="red" outlined tile>
                   <v-icon>mdi-google</v-icon>
                 </v-btn>
-                <v-btn color="black" outlined>
+                <v-btn color="black" outlined tile>
                   <v-icon>mdi-github</v-icon>
                 </v-btn>
               </div>

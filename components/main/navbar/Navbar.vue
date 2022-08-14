@@ -13,7 +13,7 @@
     </NuxtLink>
     <v-spacer/>
     <div v-if="$auth ? !$auth.loggedIn : true">
-      <v-btn color="primary" outlined to="/login">LogIn/SignUp</v-btn>
+      <v-btn color="primary" outlined tile to="/login">LogIn/SignUp</v-btn>
     </div>
     <div v-else>
       <AvatarButton/>

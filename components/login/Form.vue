@@ -28,15 +28,15 @@
               <NuxtLink class="text-decoration-none" to="/forgot">
                 <div class="caption blue--text my-3">Forgot password</div>
               </NuxtLink>
-              <v-btn :disabled="!valid" :loading="loading" block class="white--text" color="blue"
+              <v-btn :disabled="!valid" :loading="loading" block class="elevation-0 white--text" color="blue"
                      tile @click.prevent="handleLogin">Log in
               </v-btn>
               <h5 class="text-center grey--text mt-4 mb-3">Or Log in using</h5>
               <div class="d-flex align-center justify-space-around">
-                <v-btn color="red" outlined>
+                <v-btn color="red" outlined tile>
                   <v-icon>mdi-google</v-icon>
                 </v-btn>
-                <v-btn color="black" outlined>
+                <v-btn color="black" outlined tile>
                   <v-icon>mdi-github</v-icon>
                 </v-btn>
               </div>

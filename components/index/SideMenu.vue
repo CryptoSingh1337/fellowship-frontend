@@ -4,7 +4,7 @@
     <v-row class="mt-2 flex-column" no-gutters>
       <h4 class="my-3">Countries:</h4>
       <v-row justify="center" no-gutters>
-        <v-select v-model="country" :items="countries" dense hide-details label="Country" multiple solo/>
+        <v-select v-model="country" :items="countries" dense hide-details label="Country" multiple outlined solo/>
       </v-row>
     </v-row>
     <v-divider class="my-6"/>
@@ -70,5 +70,16 @@ export default {
 <style>
 .v-list-item__title {
   text-transform: capitalize;
+}
+
+.v-input__slot {
+  box-shadow: none;
+}
+
+.v-menu__content {
+  box-shadow: none;
+  border-width: thin;
+  border-style: solid;
+  border-color: rgba(0, 0, 0, .12) !important;
 }
 </style>
