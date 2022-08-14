@@ -1,15 +1,20 @@
 <template>
   <v-card :class="idx === 0 ? 'mb-4' : 'my-4'">
-    <v-card-text>
-      <div>Word of the Day</div>
-      <p class="text-h4 text--primary">el·ee·mos·y·nar·y</p>
-      <p>adjective</p>
+    <v-card-text class="pb-0">
+      <div class="text-capitalize">{{ scholarship.country }}</div>
+      <h3 class="headline text--primary">{{ scholarship.title }}</h3>
+      <v-row class="my-3" no-gutters>
+        <v-chip v-for="(degree, idx) in scholarship.degrees" :key="idx"
+                :class="idx === 0 ? 'mr-1' : (idx === scholarship.degrees.length - 1 ? 'ml-1' : 'mx-1')" label small>
+          {{ degree }}
+        </v-chip>
+      </v-row>
       <div class="text--primary">
-        {{ description | trim }}
+        {{ scholarship.description }}
       </div>
     </v-card-text>
     <v-card-actions>
-      <v-btn color="primary accent-4" text>
+      <v-btn :href="scholarship.url" color="primary accent-4" target="_blank" text>
         Read More
       </v-btn>
     </v-card-actions>
@@ -22,13 +27,10 @@ export default {
     idx: Number,
     scholarship: Object
   },
-  data: () => ({
-    description: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.`
-  }),
   filters: {
     trim: (text) => {
       if (text.length > 200)
-        return `${text.substring(0, 200)}...`
+        return `${text.substring(0, 200)}...`;
       return text;
     }
   }

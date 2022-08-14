@@ -22,7 +22,8 @@
             <div v-else>
               <ScholarshipCard v-for="(s, idx) in scholarships" :key="idx" :idx="idx" :scholarship="s"/>
               <div class="d-flex justify-center">
-                <v-btn v-model="page" class="elevation-0" color="primary" large tile @click.prevent="page++">Load more
+                <v-btn :loading="loadMoreLoading" class="elevation-0" color="primary" large tile
+                       @click.prevent="loadMore">Load more
                 </v-btn>
               </div>
             </div>
@@ -50,6 +51,7 @@ export default {
   data: () => ({
     searchQuery: "",
     searchLoading: false,
+    loadMoreLoading: false,
     scholarships: [],
     country: [],
     degree: [],
@@ -59,9 +61,32 @@ export default {
   created() {
     this.$nuxt.$on('changeCountry', (payload) => this.country = payload);
     this.$nuxt.$on('changeDegree', (payload) => this.degree = payload);
+    this.$nuxt.$on('resetPage', (payload) => this.page = payload);
     this.$nuxt.$on('applyFilter', () => this.search());
   },
   methods: {
+    loadMore() {
+      setTimeout(() => {
+        this.loadMoreLoading = true;
+        const filters = {
+          degrees: this.degree,
+          countries: this.country,
+          search: this.searchQuery,
+          page: ++this.page
+        };
+        this.$axios.post("/scholarship/get", filters)
+          .then(response => response.data.data.scholarships)
+          .then(scholarship => {
+            console.log(scholarship);
+            if (scholarship.length > 0) {
+              this.scholarships.push(...scholarship);
+            } else {
+              this.page--;
+            }
+            this.loadMoreLoading = false;
+          })
+      }, 500);
+    },
     search() {
       this.searchLoading = true;
       const filters = {
@@ -83,15 +108,15 @@ export default {
       this.countries = await response.data.data.countries.sort();
 
     if (this.$auth && this.$auth.loggedIn) {
-      const {country, program} = this.$auth.user;
-      if (country && program) {
+      const {country, degree} = this.$auth.user;
+      if (country && degree) {
         const filters = {
-          degrees: [program],
+          degrees: [degree],
           countries: [country],
           search: null,
           page: this.page
         };
-        response = await this.$axios.post("/scholarship/search", filters);
+        response = await this.$axios.post("/scholarship/get", filters);
       } else {
         response = await this.$axios.get(`/scholarship/all?page=${this.page}`);
       }

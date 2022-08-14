@@ -25,7 +25,8 @@
             <v-text-field v-model="username" dense disabled label="Username" outlined readonly/>
             <v-text-field v-model="email" :rules="[rules.required, rules.email]" dense label="Email" outlined/>
             <v-select v-model="country" :items="countries" :rules="[rules.required]" dense label="Country" outlined/>
-            <v-select v-model="program" :items="programs" :rules="[rules.required]" dense label="Program" outlined/>
+            <v-select v-model="degree" :items="degrees" :rules="[rules.required]" dense item-text="name"
+                      item-value="value" label="Program" outlined/>
             <v-btn :disabled="!valid_1" :loading="loading_1" color="primary" tile @click.prevent="handleSave">Save
             </v-btn>
           </v-form>
@@ -81,7 +82,7 @@ export default {
     username: "",
     email: "",
     country: "",
-    program: "",
+    degree: "",
     oldPassword: "",
     newPassword: "",
     confirmPassword: "",
@@ -92,18 +93,30 @@ export default {
         /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(value) ||
         "Invalid email."
     },
-    countries: Object.keys(countries.countries).map(code => countries.countries[code].name).sort(),
-    programs: ["Bachelor", "Master", "Phd"]
+    countries: Object.keys(countries.countries).map(code => countries.countries[code].name.toLowerCase()).sort(),
+    degrees: [
+      {
+        name: "Bachelor",
+        value: "BACHELOR"
+      },
+      {
+        name: "Master",
+        value: "MASTER"
+      },
+      {
+        name: "Phd",
+        value: "PHD"
+      }]
   }),
   async fetch() {
     if (this.$auth.loggedIn) {
-      const {firstName, lastName, username, email, country, program} = this.$auth.user;
+      const {firstName, lastName, username, email, country, degree} = this.$auth.user;
       this.firstName = firstName;
       this.lastName = lastName;
       this.username = username;
       this.email = email;
       this.country = country;
-      this.program = program;
+      this.degree = degree;
     }
   },
   methods: {
@@ -115,7 +128,7 @@ export default {
         lastName: this.lastName,
         email: this.email,
         country: this.country,
-        program: this.program
+        degree: this.degree
       };
       console.log(payload);
     },

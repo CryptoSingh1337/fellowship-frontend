@@ -20,7 +20,9 @@
     <v-divider class="my-6"/>
     <v-row justify="center" no-gutters>
       <v-col class="d-flex justify-space-between" cols="10">
-        <v-btn class="elevation-0" color="gray" outlined tile @click.prevent="country = []; degree = [];">Reset</v-btn>
+        <v-btn class="elevation-0" color="gray" outlined tile
+               @click.prevent="country = []; degree = []; $nuxt.$emit('resetPage', 0)">Reset
+        </v-btn>
         <v-btn class="elevation-0" color="primary" tile @click.prevent="$nuxt.$emit('applyFilter');">Apply</v-btn>
       </v-col>
     </v-row>
@@ -53,7 +55,7 @@ export default {
       {
         name: "Phd",
         value: "PHD"
-      }],
+      }]
   }),
   watch: {
     country() {
