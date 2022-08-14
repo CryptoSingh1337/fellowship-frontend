@@ -14,8 +14,7 @@
             <v-divider v-if="$vuetify.breakpoint.smAndDown" class="my-6"/>
           </v-col>
           <v-col :class="$vuetify.breakpoint.mdAndUp ? 'ml-5' : ''">
-            <h2 :class="$vuetify.breakpoint.smAndDown ? 'text-center' : ''">
-              {{ $auth ? ($auth.loggedIn ? 'Recommended' : 'Latest') : 'Latest' }} Scholarships</h2>
+            <h2 :class="$vuetify.breakpoint.smAndDown ? 'text-center' : ''">Scholarships</h2>
             <v-container v-if="this.scholarships.length === 0" class="flex-column fill-height justify-center" fluid>
               <v-icon color="" large>mdi-alert-circle-outline</v-icon>
               <h3 class="title">No Scholarship found</h3>
