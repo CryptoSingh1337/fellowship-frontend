@@ -73,7 +73,7 @@ export default {
 }
 
 .v-input__slot {
-  box-shadow: none;
+  box-shadow: none !important;
 }
 
 .v-menu__content {
