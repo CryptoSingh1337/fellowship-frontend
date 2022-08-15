@@ -30,11 +30,11 @@
       <template v-slot:item.grant="{ item }">
         <v-chip class="ml-auto" color="primary accent-4" label small>
           <v-icon left small>mdi-cash</v-icon>
-          {{ item.grant }}
+          {{ item.grant ? item.grant : 'Not available' }}
         </v-chip>
       </template>
       <template v-slot:item.country="{ item }">
-        <span class="text-capitalize">{{ item.country }}</span>
+        <span class="text-capitalize">{{ item.country | format }}</span>
       </template>
       <template v-slot:item.deadline="{ item }">
         <span>{{ getDeadline(item.createdAt) }} days</span>
@@ -89,6 +89,15 @@ export default {
       this.scholarship = this.scholarships[0];
     }
     this.loading = false;
+  },
+  filters: {
+    format: (arr) => {
+      if (arr.length > 0) {
+        let s = "";
+        arr.forEach(str => s += str)
+        return s;
+      }
+    }
   }
 }
 </script>

@@ -13,7 +13,7 @@
         </v-chip>
         <v-chip class="ml-auto" color="primary accent-4" label small>
           <v-icon left small>mdi-cash</v-icon>
-          {{ scholarship.grant }}
+          {{ scholarship.grant ? scholarship.grant : 'Not available' }}
         </v-chip>
       </v-row>
       <div class="text--primary">
