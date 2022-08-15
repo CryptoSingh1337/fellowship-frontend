@@ -28,7 +28,8 @@ export default {
   plugins: [],
   components: false,
   buildModules: [
-    "@nuxtjs/vuetify"
+    "@nuxtjs/vuetify",
+    "@nuxtjs/moment"
   ],
   modules: [
     "@nuxtjs/axios",

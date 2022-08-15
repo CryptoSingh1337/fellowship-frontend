@@ -1,7 +1,10 @@
 <template>
   <v-card :class="idx === 0 ? 'mb-4' : 'my-4'" outlined>
     <v-card-text class="pb-0">
-      <div class="text-capitalize">{{ scholarship.country }}</div>
+      <div class="d-flex">
+        <span class="text-capitalize">{{ scholarship.country }}</span>
+        <span class="ml-auto">{{ $moment(scholarship.createdAt).fromNow() }}</span>
+      </div>
       <h3 class="headline text--primary">{{ scholarship.title }}</h3>
       <v-row class="my-3" no-gutters>
         <v-chip v-for="(degree, idx) in scholarship.degrees" :key="idx"
