@@ -94,7 +94,12 @@ export default {
     format: (arr) => {
       if (arr.length > 0) {
         let s = "";
-        arr.forEach(str => s += str)
+        for (let i = 0; i < arr.length; i++) {
+          if (i === arr.length - 1)
+            s += arr[i];
+          else
+            s += arr[i] + ", ";
+        }
         return s;
       }
     }

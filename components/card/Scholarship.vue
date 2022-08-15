@@ -2,7 +2,7 @@
   <v-card :class="idx === 0 ? 'mb-4' : 'my-4'" outlined>
     <v-card-text class="pb-0">
       <div class="d-flex">
-        <span class="text-capitalize">{{ scholarship.country }}</span>
+        <span class="text-capitalize">{{ scholarship.country | format }}</span>
         <span class="ml-auto">{{ $moment(scholarship.createdAt).fromNow() }}</span>
       </div>
       <h3 class="headline text--primary">{{ scholarship.title }}</h3>
@@ -39,6 +39,18 @@ export default {
       if (text.length > 200)
         return `${text.substring(0, 200)}...`;
       return text;
+    },
+    format: (arr) => {
+      if (arr.length > 0) {
+        let s = "";
+        for (let i = 0; i < arr.length; i++) {
+          if (i === arr.length - 1)
+            s += arr[i];
+          else
+            s += arr[i] + ", ";
+        }
+        return s;
+      }
     }
   }
 };
