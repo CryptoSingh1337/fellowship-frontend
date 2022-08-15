@@ -17,13 +17,13 @@
         </v-col>
       </v-row>
       <v-divider class="mx-2"></v-divider>
-      <v-list-item v-if="$auth ? $auth.user.roles.includes('ADMIN') : false" :to="`/admin`" link nuxt>
+      <v-list-item v-if="$auth ? $auth.user.roles.includes('ADMIN') : false" link nuxt to="/admin/dashboard">
         <v-list-item-icon>
           <v-icon>mdi-account</v-icon>
         </v-list-item-icon>
-        <v-list-item-title class="text-end">Admin</v-list-item-title>
+        <v-list-item-title class="text-end">Dashboard</v-list-item-title>
       </v-list-item>
-      <v-list-item :to="`/profile`" link nuxt>
+      <v-list-item link nuxt to="/profile">
         <v-list-item-icon>
           <v-icon>mdi-tune</v-icon>
         </v-list-item-icon>
