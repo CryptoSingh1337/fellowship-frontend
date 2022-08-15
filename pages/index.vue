@@ -123,8 +123,12 @@ export default {
     } else {
       response = await this.$axios.get(`/scholarship/all?page=${this.page}`)
     }
-    if (response.status === 200)
+    if (response.status === 200 && response.data.data.scholarships.length > 0)
       this.scholarships = await response.data.data.scholarships;
+    else {
+      response = await this.$axios.get(`/scholarship/all?page=${this.page}`);
+      this.scholarships = await response.data.data.scholarships;
+    }
   }
 };
 </script>
