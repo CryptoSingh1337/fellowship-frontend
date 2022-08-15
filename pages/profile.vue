@@ -91,17 +91,42 @@ export default {
     }
   },
   methods: {
+    setAlert(type, icon, text) {
+      this.$store.commit("showAlert", {
+        alertType: type,
+        alertIcon: icon,
+        alertText: text,
+      });
+    },
     handleSave() {
       this.loading = true;
-      setTimeout(() => (this.loading = false), 2000);
       const payload = {
-        firstname: this.firstName,
+        firstName: this.firstName,
         lastName: this.lastName,
         email: this.email,
         country: this.country,
         degree: this.degree
       };
-      console.log(payload);
+      this.$axios.put("/user/update", payload)
+        .then(() =>
+          this.setAlert(
+            "success",
+            "mdi-rocket-launch-outline",
+            "Your details has been updated."
+          ))
+        .then(() => {
+          this.loading = false;
+          setTimeout(() => this.$store.commit("toggleAlert"), 3000)
+        })
+        .catch((err) => {
+          this.setAlert(
+            "error",
+            "mdi-alert-octagon-outline",
+            err.response.data.error.message[0]
+          );
+          this.loading = false;
+          setTimeout(() => this.$store.commit("toggleAlert"), 4000)
+        });
     }
   }
 }
