@@ -12,6 +12,9 @@
       <v-toolbar-title class="ml-3 headline font-weight-bold black--text" v-text="title"/>
     </NuxtLink>
     <v-spacer/>
+    <v-btn :to="'/faq'" active-class="no-active" class="ma-2" color="primary" icon>
+      <v-icon>mdi-information-outline</v-icon>
+    </v-btn>
     <div v-if="$auth ? !$auth.loggedIn : true">
       <v-btn color="primary" outlined tile to="/login">LogIn/SignUp</v-btn>
     </div>
@@ -39,5 +42,9 @@ export default {
   border-width: 0 0 thin;
   border-style: solid;
   border-bottom-color: rgba(0, 0, 0, .12) !important;
+}
+
+.v-btn--active {
+  opacity: 1 !important;
 }
 </style>
