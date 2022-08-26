@@ -12,9 +12,23 @@
       <v-toolbar-title class="ml-3 headline font-weight-bold black--text" v-text="title"/>
     </NuxtLink>
     <v-spacer/>
-    <v-btn :to="'/faq'" active-class="no-active" class="ma-2" color="primary" icon>
-      <v-icon>mdi-information-outline</v-icon>
-    </v-btn>
+    <v-tooltip bottom>
+      <template v-slot:activator="{on, attrs}">
+        <v-btn :to="'/faq'" active-class="no-active" class="ma-2" color="primary" icon small v-bind="attrs" v-on="on">
+          <v-icon>mdi-information-outline</v-icon>
+        </v-btn>
+      </template>
+      <span>FAQ</span>
+    </v-tooltip>
+    <v-tooltip bottom>
+      <template v-slot:activator="{on, attrs}">
+        <v-btn :to="'/contact'" active-class="no-active" class="ma-2 mr-3" color="primary" icon small v-bind="attrs"
+               v-on="on">
+          <v-icon>mdi-message-arrow-right-outline</v-icon>
+        </v-btn>
+      </template>
+      <span>Contact us</span>
+    </v-tooltip>
     <div v-if="$auth ? !$auth.loggedIn : true">
       <v-btn color="primary" outlined tile to="/login">LogIn/SignUp</v-btn>
     </div>
