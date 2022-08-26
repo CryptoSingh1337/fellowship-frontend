@@ -22,8 +22,7 @@
     <v-data-table :headers="headers" :items="scholarships" :items-per-page="10" :loading="loading" :search="search"
                   @click:row="openDialog">
       <template v-slot:item.degrees="{ item }">
-        <v-chip v-for="(d, idx) in item.degrees" :key="idx"
-                :class="idx === 0 ? 'mr-1' : (idx === item.degrees.length - 1 ? 'ml-1' : 'mx-1')" label small>
+        <v-chip v-for="(d, idx) in item.degrees" :key="idx" class="ma-1" label small>
           {{ d }}
         </v-chip>
       </template>
@@ -83,7 +82,7 @@ export default {
   },
   async fetch() {
     this.loading = true;
-    const response = await this.$axios.get(`/scholarship/all?page=${this.page}`);
+    const response = await this.$axios.get(`/scholarship`);
     if (response.status === 200 && response.data.data.scholarships.length > 0) {
       this.scholarships = response.data.data.scholarships;
       this.scholarship = this.scholarships[0];

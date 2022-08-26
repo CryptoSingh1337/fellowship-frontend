@@ -51,13 +51,12 @@ export default {
         throw "JSON must have some data";
       this.loading = true;
       this.$axios.post("/scholarship/create/bulk", this.payload)
-        .then(response => response.data)
-        .then((data) => {
-          if (data.status === 200) {
+        .then((response) => {
+          if (response.status === 200) {
             this.setAlert(
               "success",
               "mdi-rocket-launch-outline",
-              `${data.data.documentCreated} Scholarships created!`
+              `${response.data.data.documentCreated} Scholarships created!`
             );
             this.loading = false;
             setTimeout(() => this.$store.commit("toggleAlert"), 3000);
