@@ -24,9 +24,20 @@
             </v-row>
             <v-text-field v-model="username" dense disabled label="Username" outlined readonly/>
             <v-text-field v-model="email" :rules="[rules.required, rules.email]" dense label="Email" outlined/>
-            <v-select v-model="country" :items="countries" :rules="[rules.required]" dense label="Country" outlined/>
+            <v-select v-model="country" :items="countries" :rules="[rules.required]" dense label="Country"
+                      outlined/>
             <v-select v-model="degree" :items="degrees" :rules="[rules.required]" dense item-text="name"
-                      item-value="value" label="Program" outlined/>
+                      item-value="value" label="Degree" outlined/>
+            <v-select v-if="degree" v-model="programme" :items="Array.from(options.get(`${degree}`).keys())"
+                      :rules="[rules.required]"
+                      class="text-uppercase" dense item-text="name" item-value="value" label="Field of study" outlined/>
+            <v-select v-if="degree && programme" v-model="branch"
+                      :items="Array.from(options.get(`${degree}`).get(`${programme}`))" :rules="[rules.required]"
+                      class="text-uppercase" dense item-text="name" item-value="value" label="Branch" outlined/>
+            <v-select v-model="category" :items="categories" :rules="[rules.required]" class="text-uppercase" dense
+                      label="Category" outlined/>
+            <v-text-field v-model="income" :rules="[rules.required]" dense label="Income" outlined/>
+            <v-text-field v-model="percentage" :rules="[rules.required]" dense label="Percentage" outlined/>
             <v-btn :disabled="!valid" :loading="loading" color="primary" tile @click.prevent="handleSave">Save
             </v-btn>
           </v-form>
@@ -56,7 +67,12 @@ export default {
     username: "",
     email: "",
     country: "",
-    degree: "",
+    degree: null,
+    programme: "",
+    branch: "",
+    category: "",
+    income: "",
+    percentage: "",
     rules: {
       required: value => !!value || "Required.",
       email: value => {
@@ -77,17 +93,49 @@ export default {
       {
         name: "Phd",
         value: "PHD"
-      }]
+      }],
+    programmes: [{
+      name: ""
+    }],
+    options: new Map(),
+    categories: ["GEN", "SC/ST", "OBC", "PWD"],
   }),
+  created() {
+    this.degrees.forEach(degree => this.options.set(degree.value, new Map()));
+    let map = this.options.get("BACHELOR");
+    map.set("b.tech", ["cse", "ece", "it", "me"]);
+    map.set("b.sc", ["agriculture", "bio technology", "chemistry", "physics", "computer science"]);
+    map = this.options.get("MASTER");
+    map.set("mba", ["hr", "marketing", "finance", "business"]);
+    map = this.options.get("PHD");
+    map.set("PHD", ["phd"]);
+  },
   async fetch() {
     if (this.$auth.loggedIn) {
-      const {firstName, lastName, username, email, country, degree} = this.$auth.user;
+      const {
+        firstName,
+        lastName,
+        username,
+        email,
+        country,
+        degree,
+        programme,
+        branch,
+        category,
+        income,
+        percentage
+      } = this.$auth.user;
       this.firstName = firstName;
       this.lastName = lastName;
       this.username = username;
       this.email = email;
       this.country = country ? country : "";
       this.degree = degree ? degree : "";
+      this.programme = programme ? programme : "";
+      this.branch = branch ? branch : "";
+      this.category = category ? category : "";
+      this.income = income ? income : "";
+      this.percentage = percentage ? percentage : "";
     }
   },
   methods: {
@@ -105,15 +153,28 @@ export default {
         lastName: this.lastName,
         email: this.email,
         country: this.country,
-        degree: this.degree
+        degree: this.degree,
+        programme: this.programme,
+        branch: this.branch,
+        category: this.category,
+        income: this.income,
+        percentage: this.percentage
       };
       this.$axios.put("/user/update", payload)
-        .then(() =>
-          this.setAlert(
-            "success",
-            "mdi-rocket-launch-outline",
-            "Your details has been updated."
-          ))
+        .then((response) => {
+          if (response.status === 200) {
+            this.setAlert(
+              "success",
+              "mdi-rocket-launch-outline",
+              "Your details has been updated."
+            );
+            this.$auth.fetchUser();
+          } else {
+            this.setAlert("error",
+              "mdi-alert-octagon-outline",
+              "User data not updated");
+          }
+        })
         .then(() => {
           this.loading = false;
           setTimeout(() => this.$store.commit("toggleAlert"), 3000)

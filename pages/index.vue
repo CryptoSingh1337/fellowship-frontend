@@ -4,7 +4,7 @@
     <v-row align="center" class="pt-10" justify="center">
       <v-col cols="12" md="8">
         <v-text-field v-model="searchQuery" append-icon="mdi-magnify" class="mb-10" hide-details label="Search"
-                      :loading="searchLoading" outlined @click:append="search" @keydown.enter="search"/>
+                      :loading="searchLoading" outlined @keyup="search" @click:append="search"/>
         <v-row class="ma-3" no-gutters>
           <v-col cols="12" md="3">
             <div class="d-flex">
@@ -21,10 +21,8 @@
             </v-container>
             <div v-else>
               <ScholarshipCard v-for="(s, idx) in scholarships" :key="idx" :idx="idx" :scholarship="s"/>
-              <div class="d-flex justify-center">
-                <v-btn :loading="loadMoreLoading" class="elevation-0" color="primary" large tile
-                       @click.prevent="loadMore">Load more
-                </v-btn>
+              <div v-if="totalPages > 0" class="justify-center">
+                <v-pagination v-model="page" :length="totalPages" :total-visible="7"/>
               </div>
             </div>
           </v-col>
@@ -54,50 +52,48 @@ export default {
     loadMoreLoading: false,
     scholarships: [],
     country: [],
-    degree: [],
+    programme: "",
+    branch: "",
+    category: [],
+    degree: null,
     countries: [],
-    page: 0,
+    income: [20000, 1500000],
+    percentage: "",
+    page: 1,
+    totalPages: 0
   }),
   created() {
     this.$nuxt.$on('changeCountry', (payload) => this.country = payload);
     this.$nuxt.$on('changeDegree', (payload) => this.degree = payload);
-    this.$nuxt.$on('resetPage', (payload) => this.page = payload);
+    this.$nuxt.$on('changeProgramme', (payload) => this.programme = payload);
+    this.$nuxt.$on('changeBranch', (payload) => this.branch = payload);
+    this.$nuxt.$on('changeCategory', (payload) => this.category = payload);
+    this.$nuxt.$on('changeIncome', (payload) => this.income = payload);
+    this.$nuxt.$on('resetPage', (payload) => {
+      this.page = payload;
+      this.$fetch()
+    });
     this.$nuxt.$on('applyFilter', () => this.search());
   },
   methods: {
-    loadMore() {
-      setTimeout(() => {
-        this.loadMoreLoading = true;
-        const filters = {
-          degrees: this.degree,
-          countries: this.country,
-          search: this.searchQuery,
-          page: ++this.page
-        };
-        this.$axios.post("/scholarship/get", filters)
-          .then(response => response.data.data.scholarships)
-          .then(scholarship => {
-            console.log(scholarship);
-            if (scholarship.length > 0) {
-              this.scholarships.push(...scholarship);
-            } else {
-              this.page--;
-            }
-            this.loadMoreLoading = false;
-          })
-      }, 500);
-    },
     search() {
       this.searchLoading = true;
+      this.page = 1;
       const filters = {
-        degrees: this.degree,
+        degree: this.degree,
         countries: this.country,
+        programme: this.programme,
+        branch: this.branch,
+        category: this.category,
+        income: this.income,
         search: this.searchQuery,
-        page: this.page
+        page: this.page - 1
       };
       this.$axios.post("/scholarship/get", filters)
-        .then(response => response.data.data)
-        .then(data => this.scholarships = data.scholarships)
+        .then(response => {
+          this.scholarships = response.data.data.scholarships.content;
+          this.totalPages = response.data.data.scholarships.totalPages;
+        })
         .then(() => this.searchLoading = false)
         .catch(err => console.log(err))
     }
@@ -108,26 +104,62 @@ export default {
       this.countries = await response.data.data.countries.sort();
 
     if (this.$auth && this.$auth.loggedIn) {
-      const {country, degree} = this.$auth.user;
-      if (country && degree) {
-        const filters = {
-          degrees: [degree],
-          countries: [country],
-          search: null,
-          page: this.page
-        };
-        response = await this.$axios.post("/scholarship/get", filters);
-      } else {
-        response = await this.$axios.get(`/scholarship/all?page=${this.page}`);
-      }
+      const {country, degree, programme, branch, category, income, percentage} = this.$auth.user;
+      const filters = {
+        degree: this.degree,
+        countries: this.country,
+        programme: this.programme,
+        branch: this.branch,
+        category: this.category,
+        income: this.income,
+        percentage: this.percentage,
+        search: this.searchQuery,
+        page: this.page - 1
+      };
+      if (country)
+        filters.countries = [country];
+      if (degree)
+        filters.degree = degree;
+      if (programme)
+        filters.programme = programme;
+      if (branch)
+        filters.branch = branch;
+      if (category)
+        filters.category = [category]
+      if (income)
+        filters.income = [20000, income];
+      if (percentage)
+        filters.percentage = percentage;
+      response = await this.$axios.post("/scholarship/get", filters);
     } else {
-      response = await this.$axios.get(`/scholarship/all?page=${this.page}`)
+      response = await this.$axios.get(`/scholarship/all?page=${this.page - 1}`)
     }
-    if (response.status === 200 && response.data.data.scholarships.length > 0)
-      this.scholarships = await response.data.data.scholarships;
-    else {
-      response = await this.$axios.get(`/scholarship/all?page=${this.page}`);
-      this.scholarships = await response.data.data.scholarships;
+    this.scholarships = await response.data.data.scholarships.content;
+    this.totalPages = await response.data.data.scholarships.totalPages;
+  },
+  watch: {
+    page() {
+      const filters = {
+        degree: this.degree,
+        countries: this.country,
+        programme: this.programme,
+        branch: this.branch,
+        category: this.category,
+        income: this.income,
+        search: this.searchQuery,
+        page: this.page - 1
+      };
+      console.log(filters)
+      this.$axios.post(`/scholarship/get`, filters)
+        .then(response => {
+          console.log(response.data);
+          return response;
+        })
+        .then(response => {
+          this.scholarships = response.data.data.scholarships.content;
+          this.totalPages = response.data.data.scholarships.totalPages;
+        })
+        .catch(err => console.log(err))
     }
   }
 };
