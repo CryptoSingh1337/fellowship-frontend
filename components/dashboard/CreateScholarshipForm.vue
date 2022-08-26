@@ -3,23 +3,46 @@
     <v-alert :class="[$vuetify.breakpoint.mdAndDown ? 'width-md' : 'width-lg']"
              :value="alert" dense outlined type="error">{{ alertText }}
     </v-alert>
-    <h3>Upload JSON file</h3>
-    <v-icon class="mt-10 mb-5" size="100">mdi-file-upload-outline</v-icon>
-    <span v-if="payload && payload.length > 0" class="my-5">{{ payload.length }} scholarships</span>
-    <v-form v-model="valid" :class="[$vuetify.breakpoint.mdAndDown ? 'width-md' : 'width-lg']">
-      <v-file-input v-model="jsonFile" :rules="[rules.required]" accept=".json" counter label="Upload json file"
-                    outlined prepend-icon="" show-size solo @change="readFile"/>
-      <v-btn :disabled="!valid" :loading="loading" class="mx-auto elevation-0" color="primary" tile
-             @click.prevent="uploadJson">
-        Upload
-      </v-btn>
-    </v-form>
+    <v-tabs v-model="tab" background-color="transparent" centered>
+      <v-tab v-for="(item, idx) in items" :key="idx">
+        {{ item }}
+      </v-tab>
+    </v-tabs>
+    <v-container fluid>
+      <v-tabs-items v-model="tab" class="rounded">
+        <v-tab-item>
+          <v-container class="fill-height flex-column justify-center" fluid>
+            <h3>Paste JSON</h3>
+            <v-form v-model="valid" class="width-md">
+              <v-textarea v-model="json" :rows="15" :rules="[rules.required]" dense label="JSON" outlined/>
+              <v-btn :disabled="!valid" :loading="loading" class="mx-auto elevation-0" color="primary" tile
+                     @click.prevent="uploadJson">
+                Upload
+              </v-btn>
+            </v-form>
+          </v-container>
+        </v-tab-item>
+        <v-tab-item>
+          <v-container class="fill-height flex-column justify-center" fluid>
+            <h3>Upload JSON file</h3>
+            <v-icon class="mt-10 mb-5" size="100">mdi-file-upload-outline</v-icon>
+            <span v-if="payload && payload.length > 0" class="my-5">{{ payload.length }} scholarships</span>
+            <v-form v-model="valid" :class="[$vuetify.breakpoint.mdAndDown ? 'width-md' : 'width-lg']">
+              <v-file-input v-model="jsonFile" :rules="[rules.required]" accept=".json" counter label="Upload json file"
+                            outlined prepend-icon="" show-size solo @change="readFile"/>
+              <v-btn :disabled="!valid" :loading="loading" class="mx-auto elevation-0" color="primary" tile
+                     @click.prevent="uploadJson">
+                Upload
+              </v-btn>
+            </v-form>
+          </v-container>
+        </v-tab-item>
+      </v-tabs-items>
+    </v-container>
   </v-container>
 </template>
 
 <script>
-import error from "~/layouts/error";
-
 export default {
   name: "CreateScholarshipForm",
   data: () => ({
@@ -28,10 +51,13 @@ export default {
     alertText: "",
     loading: false,
     jsonFile: null,
+    json: "",
     payload: [],
+    tab: "",
     rules: {
       required: (value) => !!value || "Required."
     },
+    items: ["Paste JSON", "Upload JSON file"]
   }),
   methods: {
     setAlert(type, icon, text) {
@@ -47,10 +73,18 @@ export default {
       setTimeout(() => (this.alert = false), 5000);
     },
     uploadJson() {
-      if (this.payload.length === 0)
-        throw "JSON must have some data";
       this.loading = true;
-      this.$axios.post("/scholarship/create/bulk", this.payload)
+      let data;
+      if (0 === this.tab) {
+        if (this.json.length === 0)
+          throw "JSON must have some data";
+        data = JSON.parse(this.json);
+      } else {
+        if (this.payload.length === 0)
+          throw "JSON must have some data";
+        data = this.payload;
+      }
+      this.$axios.post("/scholarship/create/bulk", data)
         .then((response) => {
           if (response.status === 200) {
             this.setAlert(
