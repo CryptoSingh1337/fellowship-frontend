@@ -7,10 +7,10 @@
       </div>
       <h3 class="headline text--primary">{{ scholarship.title }}</h3>
       <v-row class="my-3" no-gutters>
-        <v-chip color="primary accent-4" label small>
+        <v-chip class="ma-1" color="primary accent-4" label small>
           Income: &#8377; {{ scholarship.income ? scholarship.income.toLocaleString("en-IN") : '20,000' }}
         </v-chip>
-        <v-chip class="ml-auto" color="primary accent-4" label small>
+        <v-chip class="ma-1 ml-auto" color="primary accent-4" label small>
           <v-icon left small>mdi-cash</v-icon>
           {{ scholarship.grant ? scholarship.grant : 'Not available' }}
         </v-chip>
