@@ -1,14 +1,14 @@
 <template>
   <v-container>
     <h1>FAQs</h1>
-    <v-row v-for="(q, idx) in faq" :key="idx" class="my-3" no-gutters>
-      <h3 class="d-block">Q. {{ q.question }}</h3>
-      <p class="d-block" v-for="(a, idx) in q.answer" :key="Math.random()">{{ a }}</p>
-      <ul class="d-block" v-if="q.points">
-        <li class="d-block" v-for="(p, idx) in q.points" :key="Math.random()">{{ p }}</li>
+    <div v-for="(q, idx) in faq" :key="idx" class="ma-7">
+      <h3>Q. {{ q.question }}</h3>
+      <p v-for="(a, idx) in q.answer" :key="Math.random()">{{ a }}</p>
+      <ul v-if="q.points">
+        <li v-for="(p, idx) in q.points" :key="Math.random()">{{ p }}</li>
       </ul>
-      <p class="d-block" v-for="(f, idx) in q.followup" v-if="q.followup" :key="Math.random()">{{ f }}</p>
-    </v-row>
+      <p v-for="(f, idx) in q.followup" v-if="q.followup" :key="Math.random()">{{ f }}</p>
+    </div>
   </v-container>
 </template>
 
